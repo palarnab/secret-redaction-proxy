@@ -10,7 +10,8 @@
   "scripts": {
     "gen-ca": "node src/tools/gen-ca.js",
     "start": "node src/server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "build": "npx --yes esbuild src/server.js --bundle --platform=node --target=node18 --format=cjs --outfile=dist/srp.js && npx --yes esbuild src/tools/gen-ca.js --bundle --platform=node --target=node18 --format=cjs --outfile=dist/srp-gen-ca.js"
   },
   "engines": {
     "node": ">=18"

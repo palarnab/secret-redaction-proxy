@@ -43,7 +43,45 @@ safe no-op (the harness gets the placeholder, never a corrupted secret).
 
 ---
 
-## Quick start
+## Simple setup (no `npm install`)
+
+The repo ships prebuilt, self-contained bundles in [dist/](dist/) with `node-forge`
+already inlined — no dependency install step. You only need **Node.js 18+** on the machine.
+
+```powershell
+# 1. Generate the local CA
+node dist/srp-gen-ca.js
+#    -> writes ca\ca.pem (certificate) and ca\ca.key.pem (private key)
+
+# 2. Trust the CA (current user)
+Import-Certificate -FilePath "$PWD\ca\ca.pem" -CertStoreLocation Cert:\CurrentUser\Root
+
+# 3. Run the proxy
+node dist/srp.js --port 8787 --allowlist api.openai.com,api.anthropic.com
+
+# 4. Point a harness at it (new shell, before launching the client)
+$env:HTTPS_PROXY        = "http://localhost:8787"
+$env:NODE_EXTRA_CA_CERTS = "$PWD\ca\ca.pem"
+$env:NO_PROXY           = "localhost,127.0.0.1"
+code .    # or: claude
+```
+
+Press **Ctrl+C** on the proxy to stop and print the session summary.
+
+> The bundles accept the exact same flags and environment overrides as the source entry
+> points — `node dist/srp.js` mirrors `node src/server.js`, and `node dist/srp-gen-ca.js`
+> mirrors `node src/tools/gen-ca.js`.
+
+To rebuild the bundles after changing `src/` (requires `npx`):
+
+```powershell
+npx --yes esbuild src/server.js       --bundle --platform=node --target=node18 --format=cjs --outfile=dist/srp.js
+npx --yes esbuild src/tools/gen-ca.js --bundle --platform=node --target=node18 --format=cjs --outfile=dist/srp-gen-ca.js
+```
+
+---
+
+## Quick start (from source)
 
 ```powershell
 # 1. Install dependencies
