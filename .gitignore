@@ -1,0 +1,13 @@
+# Local CA + minted leaf certs (never commit private keys)
+ca/
+!ca/.gitkeep
+
+# Audit logs may reference sensitive fingerprints/paths
+audit/
+
+node_modules/
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db

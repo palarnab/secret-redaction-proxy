@@ -1,0 +1,22 @@
+{
+  "name": "secret-redaction-proxy",
+  "version": "0.1.0",
+  "description": "Local TLS-intercepting forward proxy that redacts secrets in outbound LLM traffic and restores them in responses.",
+  "type": "commonjs",
+  "bin": {
+    "srp": "src/server.js",
+    "srp-gen-ca": "src/tools/gen-ca.js"
+  },
+  "scripts": {
+    "gen-ca": "node src/tools/gen-ca.js",
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "node-forge": "^1.3.1"
+  },
+  "license": "MIT"
+}
